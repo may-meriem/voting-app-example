@@ -10,9 +10,9 @@ pipeline {
             stage('clone repo') {
                 steps{
 			script{
-				checkout([$class: 'GitSCM', branches: [[name: '*/master']],userRemoteConfigs: [[credentialsId: '1a12dfa4-7fc5-47a7-aa17-cc56572a41c7',url: 'https://github.com/may-meriem/voting-app-example.git']]])
+				checkout scm
 			}
-                }
+		}
             }
             stage('Build result') {
                 steps{
