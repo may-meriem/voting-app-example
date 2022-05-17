@@ -9,7 +9,7 @@ pipeline {
     stages { 
             stage('Clone repo') {
                 steps{
-        
+                    checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/may-meriem/voting-app-example.git']]])	
                 }
             }
             stage('Build result') {
