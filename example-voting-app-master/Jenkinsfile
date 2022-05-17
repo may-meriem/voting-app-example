@@ -1,31 +1,49 @@
-node {
-    def resultImage
-    def voteImage
-    def workerImage
-    docker.withRegistry("https://index.docker.io/v1/", "ibuchh" ) { 
-      stage('Clone repo') {
-        checkout scm
-      }
-      stage('Build result') {
-        resultImage = docker.build("ibuchh/examplevotingapp-result", "./result")
-      } 
-      stage('Build vote') {
-        voteImage = docker.build("ibuchh/examplevotingapp-vote", "./vote")
-      }
-      stage('Build worker dotnet') {
-        workerImage = docker.build("ibuchh/examplevotingapp-worker", "./worker")
-      }
-      stage('Push result image') {
-          resultImage.push("${env.BUILD_NUMBER}")
-          resultImage.push()
-      }
-      stage('Push vote image') {
-          voteImage.push("${env.BUILD_NUMBER}")
-          voteImage.push()
-      }
-      stage('Push worker image') {
-          workerImage.push("${env.BUILD_NUMBER}")
-          workerImage.push()
-      }
+pipeline {
+        agent any
+        environment {
+            DOCKERHUB_CREDENTIALS = credentials('dockerhub-cred-may')
+            resultImage = ''
+            voteImage = ''
+            workerImage = ''
+	    }  
+    stages { 
+            stage('Clone repo') {
+                steps{
+        
+                }
+            }
+            stage('Build result') {
+                steps{
+                    resultImage = docker.build("ibuchh/examplevotingapp-result", "./result")
+                }
+            }
+            stage('Build vote') {
+                steps{
+                    voteImage = docker.build("ibuchh/examplevotingapp-vote", "./vote")
+                }
+            }
+            stage('Build worker dotnet') {
+                steps{
+                    workerImage = docker.build("ibuchh/examplevotingapp-worker", "./worker")
+                }
+            }
+            stage('Push result image') {
+                steps{
+                    resultImage.push("${env.BUILD_NUMBER}")
+                    resultImage.push()
+                }
+            }
+            stage('Push vote image') {
+                steps{
+                    voteImage.push("${env.BUILD_NUMBER}")
+                    voteImage.push()
+                }
+            }
+            stage('Push worker image') {
+                steps{
+                    workerImage.push("${env.BUILD_NUMBER}")
+                    workerImage.push()
+                }
+            }
     }
 }
